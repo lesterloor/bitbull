@@ -18,20 +18,39 @@ module.exports = function(app, passport) {
     // PROFILE SECTION =========================
     app.get('/home',isLoggedIn, function(req, res) {
       var miningAdress = "0xd171c8869e991c51cfe2d1e1ab0aa9744c70a9d3";
-      axios.get('https://api.nanopool.org/v1/eth/user/'+ miningAdress)
-        .then(function (response) {
-          console.log(response.data);
-          User.find().then(allusers => {
+      axios.get('https://api.nanopool.org/v1/eth/hashrate/'+ miningAdress)
+      .then(function (hashresponse) {
+        axios.get('https://api.nanopool.org/v1/eth/payments/'+ miningAdress)
+        .then(function (paymentresponse) {
+          axios.get('https://api.nanopool.org/v1/eth/avghashrateworkers/'+ miningAdress)
+          .then(function (workersResponse) {
+              // ADDING ALLTHE PAYMENTS
+              var paymentData = {
+                payments: paymentresponse.data.data
+              },
+              totalPaid = 0, payments = paymentData.payments, i;
+              for (i = 0; i < payments.length; i++) {
+                totalPaid += payments[i].amount;
+              }
+              var totalWorkers = {workers: workersResponse.data.data}
+              totalPaid = 0, workers = totalWorkers.workers, i;
+              for (i = 0; i < workers.length; i++) {
+                totalPaid += workers[i].amount;
+              }
 
-            console.log(req.user.local.email);
-            console.log(req.isAuthenticated());
-            res.render('home.pug', {
-              nanoResponse:response.data.data,
-              currentuser : req.user.local,
-              allusers: allusers,
-
-          });
-        });
+              console.log(totalPaid);
+              console.log(workers.length);
+              console.log(hashresponse.data.data);
+              // END ADDING ALLTHE PAYMENTS
+                console.log(req.isAuthenticated());
+                res.render('home.pug', {
+                  totalMined:parseFloat(totalPaid).toFixed(2),
+                  currentuser : req.user.local,
+                  currentHashRate : hashresponse.data.data,
+                  // allusers: allusers,
+            });
+          })
+        })
       })
     });
 
