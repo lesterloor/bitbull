@@ -1,0 +1,37 @@
+doctype html
+html
+	head
+		title home
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css")
+		link(rel="stylesheet", href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css")
+	body
+		.container
+			nav.navbar.navbar-default.navbar-default.navbar-fixed-bottom(role="navigation")
+				.container.text-center
+					.row.nav-app
+						.col-xs-3
+							a.text-muted.active(href="index.html")
+								span.glyphicon.glyphicon-home
+						.col-xs-3
+							a.text-muted(href="search.html")
+								span.glyphicon.glyphicon-heart
+						.col-xs-3
+							a.text-muted(href="like.html")
+								span.glyphicon.glyphicon-list
+						.col-xs-3
+							a.text-muted(href="record.html", active="")
+								span.glyphicon.glyphicon-calendar
+				// container
+			.jumbotron.text-center
+				h1
+					span.fa.fa-lock
+					|  iFunnymeme Registration
+				p Login or Register with:
+				a.btn.btn-default(href="/login")
+					span.fa.fa-user
+					|   Login
+				a.btn.btn-default(href="/signup")
+					span.fa.fa-user
+					|   Signup
+				

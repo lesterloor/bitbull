@@ -1,0 +1,79 @@
+include head.pug
+link(rel="stylesheet", href="/public/assets/navbar.css")
+section
+  header
+    nav.rad-navigation
+      .rad-logo-container
+        a.rad-logo(href='#') Crypto Blu
+        a.rad-toggle-btn.pull-right(href='#')
+          i.fa.fa-bars
+      .rad-top-nav-container
+        ul.links
+          li
+            a.rad-menu-item(href='#')
+              i.fa.fa-comment-o
+          li.rad-dropdown
+            a.rad-menu-item(href='#')
+              i.fa.fa-envelope-o
+                span.rad-menu-badge 3
+            ul.rad-dropmenu-item
+              li.rad-dropmenu-header
+                a(href='#') Your Notifications
+              li.rad-notification-item
+                a.rad-notification-content(href='#')
+              li.rad-dropmenu-footer
+                a(href='#') See all notifications
+          li.rad-dropdown
+            a.rad-menu-item(href='#')
+              i.fa.fa-bell-o
+                span.rad-menu-badge 49
+            ul.rad-dropmenu-item
+              li.rad-dropmenu-header
+                a(href='#') Your Alerts
+              li.rad-notification-item
+                a.rad-notification-content(href='#')
+              li.rad-dropmenu-footer
+                a(href='#') See all alerts
+          li.rad-dropdown
+            a.rad-menu-item(href='#')
+              img(class="smallProfilePic" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAASAAAAAJGZhYTAxYmQ2LWUyZmQtNGY0ZS1hNjMwLWE1YWY3YjAyYzJlOQ.jpg")
+              i.userPic #{currentuser.email}
+                //- span.rad-menu-badge 49
+            ul.rad-dropmenu-item
+              li.rad-dropmenu-header
+                a(href='#') Your Alerts
+              li.rad-notification-item
+                a.rad-notification-content(href='#')
+              li.rad-dropmenu-footer
+                i.fa.fa-sign-out 
+                  a(href='/logout') Logout
+        
+aside
+  nav.rad-sidebar
+    ul
+      li
+        a.inbox(href='#')
+          i.fa.fa-dashboard
+            span.icon-bg.rad-bg-success
+          span.rad-sidebar-item Dashboard
+      li
+        a(href='#')
+          i.fa.fa-bar-chart-o
+            span.icon-bg.rad-bg-danger
+          span.rad-sidebar-item Ticket status
+      li
+        a.snooz(href='#')
+          i.fa.fa-line-chart
+            span.icon-bg.rad-bg-primary
+          span.rad-sidebar-item Call trends
+      li
+        a.done(href='#')
+          i.fa.fa-area-chart
+            span.icon-bg.rad-bg-warning
+          span.rad-sidebar-item Heat maps
+      li
+        a(href='#')
+          i.fa.fa-wrench
+            span.icon-bg.rad-bg-violet
+          span.rad-sidebar-item Settings
+                            

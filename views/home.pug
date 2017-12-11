@@ -1,0 +1,49 @@
+doctype html
+include navigation.pug
+script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+script(src="/public/assets/main.js")
+main
+section
+  .rad-body-wrapper
+    .container-fluid
+      .row
+        .col-lg-4.col-md-12.col-xs-12
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title Area Chart
+            .panel-body
+              #areaChart.rad-chart
+        .col-lg-4.col-md-6.col-xs-12
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title Line Chart
+            .panel-body
+              table(id="keywords" cellspacing="0" cellpadding="0")
+              thead  
+                tr
+                  th Current
+                  th 3
+                  th 6
+                  th 12
+                  th 24
+              tbody
+                tr
+                  td(class="lalign") #{nanoResponse.hashrate}
+                  td #{nanoResponse.avgHashrate.h3}
+                  td #{nanoResponse.avgHashrate.h6}
+                  td #{nanoResponse.avgHashrate.h12}
+                  td #{nanoResponse.avgHashrate.h24}
+        // here
+        .col-lg-4.col-md-6.col-xs-12
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title Donut Chart
+            .panel-body
+              #donutChart.rad-chart
+      .row
+        .col-md-12
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title Bar Chart
+            .panel-body
+              #barChart.rad-chart
