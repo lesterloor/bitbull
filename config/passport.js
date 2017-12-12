@@ -102,6 +102,7 @@ module.exports = function(passport) {
                         newUser.local.firstName    = req.body.firstName;
                         newUser.local.lastName    = req.body.lastName;
                         newUser.local.email    = email;
+                        newUser.local.wallet = [{coinName:'BTC',amount:50}];
                         newUser.local.nanoPoolToken    = null;
                         newUser.local.password = newUser.generateHash(password);
 

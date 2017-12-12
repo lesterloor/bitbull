@@ -6,16 +6,17 @@ main
   section
     div(class="rad-body-wrapper")
       h3 Account Settings
-        |  
-        button Edit
-      ul
-        li
-          p Name: #{currentuser.firstName} #{currentuser.lastName} 
-        li
-          p Email: #{currentuser.email} 
-        li
-          p Nanopool Token: 
-      form(action="/editprofile" method="post")
-        input(type="text" class="form-control" Placeholder="Change First Name" name="firstname")
-        //- input(type="text" class="form-control" Placeholder="Change Last Name" name="lastname")
-        button(type="submit" class="btn btn-warning btn-lg") Submit
+        form(action="/editprofile" method="post")
+          ul
+            li
+              p(class="fullName") Name: #{currentuser.firstName} #{currentuser.lastName}
+            li
+              p Email: 
+                |
+                input(class="inputField" value=currentuser.email type="text" placeholder="Update email " name="emailUpdate")
+            li
+              p Nanopool Token: 
+                |
+                input(class="inputField" value=currentuser.nanoPoolToken type="text" placeholder="Update nano pool token " name="nanoPoolUpdate")
+            li
+              button(class="inputField" type="submit" class="btn btn-warning btn-lg") Submit

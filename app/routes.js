@@ -18,41 +18,38 @@ module.exports = function(app, passport) {
 
     // HOME SECTION =========================
     app.get('/home',isLoggedIn, function(req, res) {
-      var miningAdress = "0xd171c8869e991c51cfe2d1e1ab0aa9744c70a9d3";
-      axios.get('https://api.nanopool.org/v1/eth/hashrate/'+ miningAdress)
-      .then(function (hashresponse) {
-        axios.get('https://api.nanopool.org/v1/eth/payments/'+ miningAdress)
-        .then(function (paymentresponse) {
-          axios.get('https://api.nanopool.org/v1/eth/avghashrateworkers/'+ miningAdress)
-          .then(function (workersResponse) {
-              // ADDING ALLTHE PAYMENTS
-              var paymentData = {
-                payments: paymentresponse.data.data
-              },
-              totalPaid = 0, payments = paymentData.payments, i;
-              for (i = 0; i < payments.length; i++) {
-                totalPaid += payments[i].amount;
-              }
-              var totalWorkers = {workers: workersResponse.data.data}
-              totalPaid = 0, workers = totalWorkers.workers, i;
-              for (i = 0; i < workers.length; i++) {
-                totalPaid += workers[i].amount;
-              }
-
-              console.log(totalPaid);
-              console.log(workers.length);
-              console.log(hashresponse.data.data);
-              // END ADDING ALLTHE PAYMENTS
-                console.log(req.isAuthenticated());
-                res.render('home.pug', {
-                  totalMined:parseFloat(totalPaid).toFixed(2),
-                  currentuser : req.user.local,
-                  currentHashRate : hashresponse.data.data,
-                  // allusers: allusers,
+      console.log(req.user.local.email, 'The token is ',req.user.local.nanoPoolToken);
+      var nanoPoolToken = req.user.local.nanoPoolToken;
+      User.findOne({ 'local.email': req.user.local.email}, function (err, doc){
+        console.log('Found', doc.local.firstName);
+        if(doc.local.nanoPoolToken != null){
+          axios.all([
+            axios.get('https://api.nanopool.org/v1/eth/hashrate/'+ nanoPoolToken),
+            axios.get('https://api.nanopool.org/v1/eth/payments/'+ nanoPoolToken),
+            axios.get('https://api.nanopool.org/v1/eth/workers/'+ nanoPoolToken)
+          ])
+          .then(axios.spread((hashresponse, paymentresponse, workersResponse) => {
+            // ADDING ALLTHE PAYMENTS
+            var paymentData = {payments: paymentresponse.data.data},
+            totalPaid = 0, payments = paymentData.payments, i;
+            for (i = 0; i < payments.length; i++) {totalPaid += payments[i].amount;}
+            // ADDING ALLTHE MINERS
+            var bookCount = Object.keys(workersResponse.data.data).length;
+            console.log(bookCount);
+            res.render('home.pug',{
+              minerPaid:parseFloat(totalPaid).toFixed(2),
+              currentuser : req.user.local,
+              totalMiners: bookCount,
+              currentHashRate : hashresponse.data.data,
             });
-          })
-        })
-      })
+          }));
+        }else{
+          console.log("you have no pool");
+          res.render('home.pug',{currentuser : req.user.local, noMiner: "Please update your miner here"});
+        }
+      });
+
+
     });
 
     // LOGOUT ==============================
@@ -62,50 +59,31 @@ module.exports = function(app, passport) {
     });
     // Profile ==============================
     app.get('/profile',isLoggedIn, function(req, res) {
-      res.render("profile.pug",{currentuser : req.user.local});
+      User.findOne({ 'local.email': req.user.local.email}, function (err, doc){
+        console.log(doc.local.email);
+        res.render("profile.pug",{currentuser : doc.local});
+      });
 
     });
     app.post('/editprofile',isLoggedIn, function(req, res) {
-      console.log(req.body.firstname);
-      // var query = { 'locl.firstName': 'lester','local.lastName': 'loor' };
-        User.update({ 'local.firstName' :  req.body.firstname },function(err,user){
-
-        if (err)  throw err;
-
-          console.log(user);
-          res.render("profile.pug",{currentuser : req.user.local});
-
-        });
-      // var query = { firstName: 'lester' };
-      // User.update(query, { firstName: req.body.username },function(err,promo){
-      //
-      //   if (err)  throw err;
-      //   console.log("Found post");
-      //   console.log("Found post");
-      //   console.log("Found post");
-      //   res.redirect("profile");
-      //
-      // });
-      //     // Handle any possible database errors
-      //     if (err) {
-      //         res.status(500).send(err);
-      //     } else {
-      //         // Update each attribute with any possible attribute that may have been submitted in the body of the request
-      //         // If that attribute isn't in the request body, default back to whatever it was before.
-      //         edit.username = req.body.username || edit.username;
-      //
-      //         // Save the updated document back to the database
-      //         edit.save((err, edit) => {
-      //             if (err) {
-      //                 res.status(500).send(err)
-      //             }
-      //             res.status(200).send(edit);
-      //             res.render("profile.pug",{currentuser : req.user.local});
-      //
-      //         });
-      //     }
-      // });
-
+      //taking in form data
+      console.log(req.body.nanoPoolUpdate);
+      //searching database email
+      User.findOne({ 'local.email': req.user.local.email}, function (err, doc){
+        // making sure req.user matches email
+        if(doc.local.email === req.user.local.email){
+          console.log("email match continue to update user profile");
+          //updating user informtation
+          User.where('local.email', doc.local.email)
+          .update({$set: {'local.nanoPoolToken': req.body.nanoPoolUpdate,'local.email':req.body.emailUpdate}}, function (err, count) {
+            if (err)  throw err;
+            console.log("You have updated nano pool token with",req.body.nanoPoolUpdate);
+            res.redirect(req.get('referer'));
+          });
+        }else{
+          console.log("Current user email does not match");
+        }
+      });
     });
 
     app.post('/remove', function(request, response){

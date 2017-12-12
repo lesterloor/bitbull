@@ -6,6 +6,10 @@ $(function() {
       $item.removeClass("active");
     }
   });
+  $('#edit').on('click', function(){
+        $('.updateInputHide').toggleClass('updateInputShow')
+    });
+
 
   $(".rad-toggle-btn").on('click', function() {
     $(".rad-sidebar").toggleClass("rad-nav-min");

@@ -18,17 +18,33 @@ section
           .panel.panel-default
             .panel-heading
               h3.panel-title Current Mining Stats
-            .panel-body
-              h4 Total Earnings
-              table
-                tr
-                  th Etherium
-                  th Hashrate
-                  th Workers Online
-                tr
-                  td #{totalMined}
-                  td #{currentHashRate}
-                  td #{totalWorkers}/#{totalWorkers}
+            .panel-body(style="padding:.4px!important")
+              #wrapper
+                table#keywords(cellspacing='0', cellpadding='0')
+                  thead
+                    tr
+                      th
+                        span Mining Stats
+                      th
+                        span Amount
+                  tbody
+                    tr
+                      td.lalign Current Hashrate:
+                      td #{currentHashRate}
+                    tr
+                      td.lalign Total Earned:
+                      td #{minerPaid}
+                    tr
+                      td.lalign Miners Online:
+                      td #{totalMiners} / #{totalMiners}
+              //- h4 #{noMiner}
+              //- ul
+              //-   li
+              //-     span Total Earned: #{minerPaid}
+              //-   li
+              //-     span Current Hashrate: #{currentHashRate}
+              //-   li
+              //-     span Miners Online: #{totalMiners}/#{totalMiners}
             
 
                     //- th BTC: 
