@@ -78,6 +78,7 @@ module.exports = function(passport) {
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
     },
     function(req, email, password, done) {
+      console.log(req.body);
         if (email)
             email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
@@ -86,19 +87,22 @@ module.exports = function(passport) {
             // if the user is not already logged in:
             if (!req.user) {
                 User.findOne({ 'local.email' :  email }, function(err, user) {
+
                     // if there are any errors, return the error
                     if (err)
                         return done(err);
 
                     // check to see if theres already a user with that email
                     if (user) {
+
                         return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
                     } else {
                         var newUser            = new User();
 
+                        newUser.local.firstName    = req.body.firstName;
+                        newUser.local.lastName    = req.body.lastName;
                         newUser.local.email    = email;
-                        newUser.local.membership    = "noob";
-                        newUser.local.profilePic    = "http://i2.kym-cdn.com/photos/images/newsfeed/001/182/913/1fe.png";
+                        newUser.local.nanoPoolToken    = null;
                         newUser.local.password = newUser.generateHash(password);
 
                         newUser.save(function(err) {

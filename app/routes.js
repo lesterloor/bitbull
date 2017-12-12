@@ -15,7 +15,8 @@ module.exports = function(app, passport) {
         res.render('index.pug');
     });
 
-    // PROFILE SECTION =========================
+
+    // HOME SECTION =========================
     app.get('/home',isLoggedIn, function(req, res) {
       var miningAdress = "0xd171c8869e991c51cfe2d1e1ab0aa9744c70a9d3";
       axios.get('https://api.nanopool.org/v1/eth/hashrate/'+ miningAdress)
@@ -58,6 +59,53 @@ module.exports = function(app, passport) {
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/login');
+    });
+    // Profile ==============================
+    app.get('/profile',isLoggedIn, function(req, res) {
+      res.render("profile.pug",{currentuser : req.user.local});
+
+    });
+    app.post('/editprofile',isLoggedIn, function(req, res) {
+      console.log(req.body.firstname);
+      // var query = { 'locl.firstName': 'lester','local.lastName': 'loor' };
+        User.update({ 'local.firstName' :  req.body.firstname },function(err,user){
+
+        if (err)  throw err;
+
+          console.log(user);
+          res.render("profile.pug",{currentuser : req.user.local});
+
+        });
+      // var query = { firstName: 'lester' };
+      // User.update(query, { firstName: req.body.username },function(err,promo){
+      //
+      //   if (err)  throw err;
+      //   console.log("Found post");
+      //   console.log("Found post");
+      //   console.log("Found post");
+      //   res.redirect("profile");
+      //
+      // });
+      //     // Handle any possible database errors
+      //     if (err) {
+      //         res.status(500).send(err);
+      //     } else {
+      //         // Update each attribute with any possible attribute that may have been submitted in the body of the request
+      //         // If that attribute isn't in the request body, default back to whatever it was before.
+      //         edit.username = req.body.username || edit.username;
+      //
+      //         // Save the updated document back to the database
+      //         edit.save((err, edit) => {
+      //             if (err) {
+      //                 res.status(500).send(err)
+      //             }
+      //             res.status(200).send(edit);
+      //             res.render("profile.pug",{currentuser : req.user.local});
+      //
+      //         });
+      //     }
+      // });
+
     });
 
     app.post('/remove', function(request, response){

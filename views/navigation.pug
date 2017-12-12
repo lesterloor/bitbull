@@ -4,7 +4,7 @@ section
   header
     nav.rad-navigation
       .rad-logo-container
-        a.rad-logo(href='#') Crypto Blu
+        a.rad-logo(href='/home') Crypto Blu
         a.rad-toggle-btn.pull-right(href='#')
           i.fa.fa-bars
       .rad-top-nav-container
@@ -37,7 +37,7 @@ section
           li.rad-dropdown
             a.rad-menu-item(href='#')
               img(class="smallProfilePic" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAASAAAAAJGZhYTAxYmQ2LWUyZmQtNGY0ZS1hNjMwLWE1YWY3YjAyYzJlOQ.jpg")
-              i.userPic #{currentuser.email}
+              i.userPic #{currentuser.firstName}
                 //- span.rad-menu-badge 49
             ul.rad-dropmenu-item
               li.rad-dropmenu-header
@@ -71,6 +71,11 @@ aside
           i.fa.fa-area-chart
             span.icon-bg.rad-bg-warning
           span.rad-sidebar-item Heat maps
+      li
+        a.done(href='/profile')
+          i.fa.fa-area-chart
+            span.icon-bg.rad-bg-violet
+          span.rad-sidebar-item Profile Settings
       li
         a(href='#')
           i.fa.fa-wrench

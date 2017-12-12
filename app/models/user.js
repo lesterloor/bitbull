@@ -7,9 +7,10 @@ var userSchema = mongoose.Schema({
 
     local            : {
         email        : String,
+        firstName        : String,
+        lastName        : String,
         password     : String,
-        profilePic     : String,
-        membership     : String
+        nanoPoolToken     : String
     },
     facebook         : {
         id           : String,
@@ -31,6 +32,8 @@ var userSchema = mongoose.Schema({
     }
 
 });
+
+
 
 // generating a hash
 userSchema.methods.generateHash = function(password) {

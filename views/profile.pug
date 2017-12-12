@@ -1,0 +1,21 @@
+doctype html
+include navigation.pug
+script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+script(src="/public/assets/main.js")
+main
+  section
+    div(class="rad-body-wrapper")
+      h3 Account Settings
+        |  
+        button Edit
+      ul
+        li
+          p Name: #{currentuser.firstName} #{currentuser.lastName} 
+        li
+          p Email: #{currentuser.email} 
+        li
+          p Nanopool Token: 
+      form(action="/editprofile" method="post")
+        input(type="text" class="form-control" Placeholder="Change First Name" name="firstname")
+        //- input(type="text" class="form-control" Placeholder="Change Last Name" name="lastname")
+        button(type="submit" class="btn btn-warning btn-lg") Submit
